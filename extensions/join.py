@@ -23,7 +23,7 @@ class Join(commands.Cog):
             f"Everyone welcome {member.mention} to the SkinFlow discord!",
             f"Welcome {member.mention}, it's good to have you!",
             f"Hi {member.mention}, welcome to the server!",
-            f"{member.mention} just showed up, make them feel welcome!>",
+            f"{member.mention} just showed up, make them feel welcome!",
             f"Say hello to our newest member, {member.mention}!",
             f"Welcome {member.mention}, we hope you brought pizza!",
             f"Welcome to the SkinFlow community {member.mention}!",
