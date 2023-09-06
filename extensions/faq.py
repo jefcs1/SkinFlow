@@ -65,6 +65,11 @@ class FAQ(commands.Cog):
 
     @app_commands.command(name="faq", description="Sends the FAQ Dropdown")
     async def faq(self, interaction: discord.Interaction):
+        if not interaction.user.guild_permissions.administrator:
+            await interaction.response.send_message(
+                "Sorry, only admins can use this command."
+            )
+            return
         await interaction.response.send_message(
             "Sending the FAQ Dropdown...", ephemeral=True
         )
