@@ -8,7 +8,7 @@ from discord.ext import commands, tasks
 skinflow_faq = {
     "How do I get access to the Trading Channel?": {
         "title": "In order to get access to the Trading Channel, you need the Trader Role.",
-        "description": "To get the <@&1146543213159653386> role, you need to link your Steam account to your Discord.\nYou can do this in `Discord Settings -> Connections`",
+        "description": "The <@&1146543213159653386> role is a linked role.\nTo get it, go to `Server Settings -> Linked Roles`, and then select the Trader Role!",
     },
     "How long does it take to receive my money?": {
         "title": "Payment times differ depending on the chosen withdrawal method",
