@@ -21,15 +21,14 @@ skinflow_faq = {
 }
 
 
-class FAQsDropDownView(discord.ui.View):
+class PersistentViewFAQ(discord.ui.View):
     def __init__(self):
-        super().__init__()
+        super().__init__(timeout=None)
         self.add_item(FAQsDropDown())
 
 
 class FAQsDropDown(discord.ui.Select):
     def __init__(self):
-        super().__init__()
 
         options = []
         for label, value in skinflow_faq.items():
@@ -40,6 +39,7 @@ class FAQsDropDown(discord.ui.Select):
             min_values=1,
             max_values=1,
             options=options,
+            custom_id="persistentview:faq"
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -83,7 +83,7 @@ class FAQ(commands.Cog):
             color=0x44A8D,
         )
         faq_embed.set_footer(text="SkinFlow - Instantly Sell Your CSGO Skins")
-        await channel.send(embed=faq_embed, view=FAQsDropDownView())
+        await channel.send(embed=faq_embed, view=PersistentViewFAQ())
 
 
 async def setup(bot: commands.Bot) -> None:
