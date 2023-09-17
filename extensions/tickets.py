@@ -14,7 +14,7 @@ class TicketButton(discord.ui.View):
         label="Open a Ticket",
         style=discord.ButtonStyle.blurple,
         emoji="<:skinflow_ticket:1146808977343135766>",
-        custom_id="button:openticket"
+        custom_id="button:openticket",
     )
     async def open_button(
         self, interaction: discord.Interaction, button: discord.ui.Button
@@ -86,7 +86,7 @@ class CloseButton(discord.ui.View):
         label="Close the Ticket",
         style=discord.ButtonStyle.blurple,
         emoji="<:skinflow_lock:1146810034261598290>",
-        custom_id="button:closeticket"
+        custom_id="button:closeticket",
     )
     async def close_button(
         self, interaction: discord.Interaction, button: discord.ui.Button
@@ -134,7 +134,7 @@ class DeleteButton(discord.ui.View):
         label="Delete the Ticket",
         style=discord.ButtonStyle.red,
         emoji="<:skinflow_trash:1146810798992265318>",
-        custom_id="button:deleteticket"
+        custom_id="button:deleteticket",
     )
     async def delete_button(
         self, interaction: discord.Interaction, button: discord.ui.Button

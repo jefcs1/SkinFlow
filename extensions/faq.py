@@ -33,7 +33,6 @@ class PersistentViewFAQ(discord.ui.View):
 
 class FAQsDropDown(discord.ui.Select):
     def __init__(self):
-
         options = []
         for label, value in skinflow_faq.items():
             options.append(discord.SelectOption(label=label, value=label))
@@ -43,7 +42,7 @@ class FAQsDropDown(discord.ui.Select):
             min_values=1,
             max_values=1,
             options=options,
-            custom_id="persistentview:faq"
+            custom_id="persistentview:faq",
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -66,6 +65,10 @@ class FAQ(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.logger = logging.getLogger(f"SkinFlow.{self.__class__.__name__}")
         self.bot = bot
+
+    async def cog_load(self) -> None:
+        view = PersistentViewFAQ()
+        self.bot.add_view(view)
 
     @app_commands.command(name="faq", description="Sends the FAQ Dropdown")
     async def faq(self, interaction: discord.Interaction):

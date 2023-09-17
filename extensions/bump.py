@@ -74,5 +74,6 @@ class Bump(commands.Cog):
             f"{discord.utils.format_dt(self.next_bump_dt)}"
         )
 
+
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Bump(bot))
