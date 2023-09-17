@@ -9,7 +9,7 @@ from discord.ext import commands
 
 class Join(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
-        self.logger = logging.getLogger(f"EmployeeBot.{self.__class__.__name__}")
+        self.logger = logging.getLogger(f"SkinFlow.{self.__class__.__name__}")
         self.bot = bot
 
     @commands.Cog.listener()
