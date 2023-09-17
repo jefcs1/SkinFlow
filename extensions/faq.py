@@ -18,6 +18,10 @@ skinflow_faq = {
         "title": "Some of the reasons why your skin might not be tradable on our website are:",
         "description": "> 1.) - Your skin's price is too low for our inventory. We do not purchase skins below a certain threshold amount.\n> 2.) - Your skin's price is too volatile or not liquid enough. We do not purchase skins which do not have an active market around them.\n> 3.) - Your skin might just be trade locked. In this case, wait out the 1 to 8 days timer before transacting with it on our website.",
     },
+    "I was told balance was added to my account but I don't see the balance?": {
+        "title": "If this is the case, you're most likely looking in the wrong place.",
+        "description": "First go to this link: https://skinflow.gg/trade \n\nNow look in the top right part of your screen next to your profile icon, and the balance should be there.\n\n[Example Picture](https://fretgfr.com/u/sKiogD.png)",
+    },
 }
 
 
