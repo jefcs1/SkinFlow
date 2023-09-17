@@ -55,7 +55,7 @@ class Bump(commands.Cog):
             color=0x444A8D,
         )
         embed.add_field(
-            name=" Bumping will help us to stay at the top of the Counter-Strike Tags on Disboard, so that more people can find SkinFlow!.",
+            name=" Bumping will help us to stay at the top of Disboard, so that more people can find SkinFlow!",
             value="Thank you so much for your help <:sfheart:1148972539746459740>",
         )
 
