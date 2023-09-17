@@ -14,6 +14,7 @@ class TicketButton(discord.ui.View):
         label="Open a Ticket",
         style=discord.ButtonStyle.blurple,
         emoji="<:skinflow_ticket:1146808977343135766>",
+        custom_id="button:openticket"
     )
     async def open_button(
         self, interaction: discord.Interaction, button: discord.ui.Button
@@ -67,7 +68,7 @@ class TicketButton(discord.ui.View):
         TicketEmbed2.set_footer(text="SkinFlow - Instantly Sell Your CSGO Skins")
 
         await ticket_channel.send(
-            content=f"Thank you for opening a ticket {interaction.user.mention}",
+            content=f"Thank you for opening a ticket {interaction.user.mention},\n(||<@&1152597297599893525>||)",
             embed=TicketEmbed2,
             view=CloseButton(opener),
         )
@@ -85,6 +86,7 @@ class CloseButton(discord.ui.View):
         label="Close the Ticket",
         style=discord.ButtonStyle.blurple,
         emoji="<:skinflow_lock:1146810034261598290>",
+        custom_id="button:closeticket"
     )
     async def close_button(
         self, interaction: discord.Interaction, button: discord.ui.Button
@@ -132,6 +134,7 @@ class DeleteButton(discord.ui.View):
         label="Delete the Ticket",
         style=discord.ButtonStyle.red,
         emoji="<:skinflow_trash:1146810798992265318>",
+        custom_id="button:deleteticket"
     )
     async def delete_button(
         self, interaction: discord.Interaction, button: discord.ui.Button
@@ -153,6 +156,10 @@ class Tickets(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.logger = logging.getLogger(f"SkinFlow.{self.__class__.__name__}")
         self.bot = bot
+
+    async def cog_load(self) -> None:
+        view = TicketButton()
+        self.bot.add_view(view)
 
     @app_commands.command(name="ticket", description="Sends the ticket Embed")
     async def slash_ticket(self, interaction: discord.Interaction):
