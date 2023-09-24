@@ -157,7 +157,7 @@ class Prices(commands.Cog):
                     description=f"We do not currently accept the {item[0]}.\nThis is most likely because it's price is too volatile.",
                     color=0xFF0000,
                 )
-                embed.set_footer(text="Skinflow - Instantly Sell your Skins")
+                embed.set_footer(text="If the item isn't accurate, provide a more descriptive item name.")
                 await m.edit(content=None, embed=embed)
             else:
                 embed = discord.Embed(
@@ -181,7 +181,7 @@ class Prices(commands.Cog):
                     )
                 if get_image(item) is not None:
                     embed.set_thumbnail(url=get_image(item))
-                embed.set_footer(text="Skinflow - Instantly Sell your Skins")
+                embed.set_footer(text="If the item isn't accurate, provide a more descriptive item name.")
                 await m.edit(content=None, embed=embed)
         else:
             embed = discord.Embed(
@@ -189,7 +189,7 @@ class Prices(commands.Cog):
                 description="Check your spelling and try again.",
                 color=0xFF0000,
             )
-            embed.set_footer(text="Skinflow - Instantly Sell your Skins")
+            embed.set_footer(text="If the item isn't accurate, provide a more descriptive item name.")
             await m.edit(content=None, embed=embed)
 
 
