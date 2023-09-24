@@ -79,7 +79,7 @@ def match_item(user_input, data):
             highest_similarity = similarity
             matched_item = item_name
     print(highest_similarity)
-    if highest_similarity < 65:
+    if highest_similarity < 55:
         return None
     else:
         return matched_item, input_tokens[1]
