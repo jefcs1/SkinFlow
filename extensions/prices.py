@@ -28,7 +28,10 @@ shorthands = {
     "Deagle": "Desert Eagle",
     "Ak": "AK-47"
 }
-
+split_conditions = {
+    "(Factory": "New)",
+    "(Minimal": "Wear)",
+}
 
 def get_input_tokens(user_input):
     input_title = user_input.title()
@@ -37,6 +40,15 @@ def get_input_tokens(user_input):
         input_title = input_title.replace(condition, full_name)
     
     words = input_title.split()
+    if "Vanilla" in words:
+        words.remove("Vanilla")
+        words.append("Knife")
+        for key, value in split_conditions.items():
+            if key in words:
+                words.remove(key)
+            if value in words:
+                words.remove(value)
+    print(words)
 
     for i in range(len(words)):
         word = words[i]
