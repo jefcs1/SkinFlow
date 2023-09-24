@@ -31,6 +31,10 @@ shorthands = {
 split_conditions = {
     "(Factory": "New)",
     "(Minimal": "Wear)",
+    "Bs": "(Battle-Scarred)",
+    "Ww": "(Well-Worn)",
+    "Ft": "(Field-Tested)",
+
 }
 
 def get_input_tokens(user_input):
@@ -48,7 +52,6 @@ def get_input_tokens(user_input):
                 words.remove(key)
             if value in words:
                 words.remove(value)
-    print(words)
 
     for i in range(len(words)):
         word = words[i]
