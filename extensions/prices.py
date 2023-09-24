@@ -111,6 +111,8 @@ def calculate_timeframe(expire_time_str):
     expire_time = datetime.datetime.strptime(expire_time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
     current_time = datetime.datetime.utcnow()
     time_difference = expire_time - current_time
+    if time_difference.days < 0:
+        return None
     timeframe_r = discord.utils.format_dt(discord.utils.utcnow()+time_difference, style="F")
     return timeframe_r
 
@@ -165,11 +167,12 @@ class Prices(commands.Cog):
                 )
                 if check_fire_deals(item, api_data) != False:
                     fire_deal = check_fire_deals(item, api_data)
-                    embed.add_field(
-                        name=f":fire: FIRE DEAL! :fire: Get an extra ${fire_deal[0]} if you sell before:",
-                        value=f"{fire_deal[1]}",
-                        inline=False,
-                    )
+                    if fire_deal[1] is not None:
+                        embed.add_field(
+                            name=f":fire: FIRE DEAL! :fire: Get an extra ${fire_deal[0]} if you sell before:",
+                            value=f"{fire_deal[1]}",
+                            inline=False,
+                        )
                 if item[1] == False and check_if_wear(item) == True:
                     embed.add_field(
                         name="Please provide a wear value for more accurate pricing.",
