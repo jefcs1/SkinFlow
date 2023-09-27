@@ -32,7 +32,7 @@ class Staff(commands.Cog):
 
     @app_commands.command(name="question", description="Create a yes/no poll that users can react to")
     async def reaction(self, interaction:discord.Interaction, question: str):
-        embed = discord.Embed(title=f"{question}", description="React with :white_check_mark: for yes\nReact with :x: for no", color=0x444a8d)
+        embed = discord.Embed(title=f"{question}", description="React with :white_check_mark: for yes!\n\nReact with :x: for no!", color=0x444a8d)
         await interaction.response.send_message(embed=embed)
         self.reaction_message = await interaction.original_response()
         await self.reaction_message.add_reaction('✅')
