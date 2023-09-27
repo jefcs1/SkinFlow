@@ -38,5 +38,15 @@ class Staff(commands.Cog):
         await self.reaction_message.add_reaction('✅')
         await self.reaction_message.add_reaction('❌')
 
+    @commands.command()
+    async def kickunverified(self, ctx):
+        msg = await ctx.send("Kicking losers...")
+        guild = self.bot.get_guild(1061365943768469575)
+        for member in guild.members:
+            if len(member.roles) == 1:
+                await member.kick(reason="Didn't complete verification")
+        await msg.edit(content="Finished!")
+
+
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Staff(bot))
