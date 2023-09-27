@@ -4,6 +4,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+required_roles = ["Moderator"]
+
 
 class Staff(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -40,12 +42,24 @@ class Staff(commands.Cog):
 
     @commands.command()
     async def kickunverified(self, ctx):
-        msg = await ctx.send("Kicking losers...")
-        guild = self.bot.get_guild(1061365943768469575)
-        for member in guild.members:
-            if len(member.roles) == 1:
-                await member.kick(reason="Didn't complete verification")
-        await msg.edit(content="Finished!")
+        if ctx.author.guild_permissions.administrator:
+            msg = await ctx.send("Kicking losers...")
+            guild = self.bot.get_guild(1061365943768469575)
+            for member in guild.members:
+                if len(member.roles) == 1:
+                    await member.kick(reason="Didn't complete verification")
+            await msg.edit(content="Finished!")
+        else:
+            member_roles = [role.name for role in ctx.author.roles]
+            if any(role in required_roles for role in member_roles):
+                msg = await ctx.send("Kicking losers...")
+                guild = self.bot.get_guild(1061365943768469575)
+                for member in guild.members:
+                    if len(member.roles) == 1:
+                        await member.kick(reason="Didn't complete verification")
+                await msg.edit(content="Finished!")
+            else:
+                await ctx.send("You don't have permission to use this command.")
 
 
 async def setup(bot: commands.Bot) -> None:
