@@ -187,11 +187,11 @@ async def get_transcript(member, channel: discord.TextChannel):
     date = getcurrenttime.strftime("%A,%B%d,%Y,%I:%M%pUTC")
     date = date.replace(',', '-')
     date = date.replace(':', '-')
-    file_name = os.path.join(save_directory, f"{date}-{member}-{uuid.uuid4()}.html")
+    file_path = os.path.join(save_directory, f"{date}-{member}-{uuid.uuid4()}.html")
     url_string=f"http://5.161.184.99/html-files/{date}-{member}-{uuid.uuid4()}.html"
-    async with aiofiles.open(file_name, mode="w", encoding="utf-8") as file:
+    async with aiofiles.open(file_path, mode="w", encoding="utf-8") as file:
         await file.write(export)
-    return file_name,url_string
+    return url_string
 
 
 async def open_ticket(opener, guild, reason, provided_id):
@@ -343,7 +343,7 @@ class DeleteTranscriptButtons(discord.ui.View):
             await interaction.response.defer(ephemeral=True)
             topic_parts = interaction.channel.topic.split(" - ")
             member = topic_parts[0].split("'s Ticket")[0]
-            file_name = await get_transcript(member=member, channel=interaction.channel)
+            url_string = await get_transcript(member=member, channel=interaction.channel)
             ticket_log_channel_id = 1161791115750547456
             ticket_log_channel = discord.utils.get(
                 interaction.guild.channels, id=ticket_log_channel_id
@@ -353,10 +353,7 @@ class DeleteTranscriptButtons(discord.ui.View):
                 description="Click the link below to download the HTML file.",
                 color=discord.Color.green(),
             )
-            embed.add_field(name="File Link", value=f"[Click here to download]({file_name[1]})")
-            embed.add_field(
-                name="File Size", value=f"{os.path.getsize(file_name[0]) / 1024:.2f} KB"
-            )
+            embed.add_field(name="File Link", value=f"[Click here to download]({url_string})")
             await ticket_log_channel.send(embed=embed)
         else:
             await interaction.response.send_message(
