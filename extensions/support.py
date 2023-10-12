@@ -238,7 +238,7 @@ async def open_ticket(opener, guild, reason, provided_id):
         embed.add_field(name="Provided ID:", value=f"{provided_id}")
         embed.set_footer(text="SkinFlow - Instantly Sell Your CS Skins")
         await ticket_channel.send(
-            content=f"Thank you for opening a ticket {opener.mention}",
+            content=f"Thank you for opening a ticket {opener.mention}\n(||<@&1152597297599893525>||)",
             embed=embed,
             view=CloseButton(opener),
         )
@@ -252,7 +252,7 @@ async def open_ticket(opener, guild, reason, provided_id):
         )
         TicketEmbed2.set_footer(text="SkinFlow - Instantly Sell Your CS Skins")
         await ticket_channel.send(
-            content=f"Thank you for opening a ticket {opener.mention}",
+            content=f"Thank you for opening a ticket {opener.mention}\(||<@&1152597297599893525>||)",
             embed=TicketEmbed2,
             view=CloseButton(opener),
         )
@@ -356,6 +356,7 @@ class DeleteTranscriptButtons(discord.ui.View):
             )
             embed.add_field(name="File Link", value=f"[Click here to download]({url_string})")
             await ticket_log_channel.send(embed=embed)
+            await interaction.followup.send("Transcript was saved!",ephemeral=True)
         else:
             await interaction.response.send_message(
                 "Only administrators can use this button.", ephemeral=True
