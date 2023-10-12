@@ -190,7 +190,7 @@ async def get_transcript(member, channel: discord.TextChannel):
     file_name = os.path.join(save_directory, f"{date}-{member}-{uuid.uuid4()}.html")
     async with aiofiles.open(file_name, mode="w", encoding="utf-8") as file:
         await file.write(export)
-    return file_name
+    return os.path.join(f"{date}-{member}-{uuid.uuid4()}.html")
 
 
 async def open_ticket(opener, guild, reason, provided_id):
