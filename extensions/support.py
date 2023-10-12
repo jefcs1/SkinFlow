@@ -17,6 +17,7 @@ ticket_reasons = [
     "I won a giveaway",
     "I sent my items but my status says declined",
     "I want to purchase an item from Skinflow",
+    "I have a different question/concern",
 ]
 
 
@@ -149,6 +150,29 @@ class ReasonsDropDown(discord.ui.Select):
                 return
             await interaction.response.send_modal(SteamID())
             await interaction.delete_original_response()
+
+        if selected_reason == "I have a different question/concern":
+            result = await check_tickets(
+                interaction.guild,
+                interaction.user,
+                selected_reason,
+            )
+            if result == True:
+                await interaction.response.send_message(
+                    "You already have a ticket open for this topic!", ephemeral=True
+                )
+                return
+            else:
+                await interaction.response.send_message(
+                    "Thank you, creating your ticket now...", ephemeral=True
+                )
+            await open_ticket(
+                interaction.user, interaction.guild, selected_reason, None
+            )
+            await interaction.edit_original_response(
+                content="Ticket Created!", ephemeral=True
+            )
+
         if selected_reason == "I want to purchase an item from Skinflow":
             result = await check_tickets(
                 interaction.guild,
@@ -185,8 +209,8 @@ async def get_transcript(member, channel: discord.TextChannel):
     export = await chat_exporter.export(channel=channel)
     getcurrenttime = discord.utils.utcnow()
     date = getcurrenttime.strftime("%A,%B%d,%Y,%I:%M%pUTC")
-    date = date.replace(',', '-')
-    date = date.replace(':', '-')
+    date = date.replace(",", "-")
+    date = date.replace(":", "-")
     file_name = f"{date}-{member}-{uuid.uuid4()}.html"
     file_path = os.path.join(save_directory, file_name)
     url_string = f"http://5.161.184.99/html-files/{file_name}"
@@ -207,6 +231,8 @@ async def open_ticket(opener, guild, reason, provided_id):
         ticket_category = discord.utils.get(guild.categories, id=other_category_id)
     if reason == "I want to purchase an item from Skinflow":
         ticket_category = discord.utils.get(guild.categories, id=buying_category_id)
+    if reason == "I have a different question/concern":
+        ticket_category = discord.utils.get(guild.categories, id=other_category_id)
 
     mode_role_id = 1061365943806214241
     mod_role = guild.get_role(mode_role_id)
@@ -344,7 +370,9 @@ class DeleteTranscriptButtons(discord.ui.View):
             await interaction.response.defer(ephemeral=True)
             topic_parts = interaction.channel.topic.split(" - ")
             member = topic_parts[0].split("'s Ticket")[0]
-            url_string = await get_transcript(member=member, channel=interaction.channel)
+            url_string = await get_transcript(
+                member=member, channel=interaction.channel
+            )
             ticket_log_channel_id = 1161791115750547456
             ticket_log_channel = discord.utils.get(
                 interaction.guild.channels, id=ticket_log_channel_id
@@ -354,9 +382,11 @@ class DeleteTranscriptButtons(discord.ui.View):
                 description="Click the link below to download the HTML file.",
                 color=discord.Color.green(),
             )
-            embed.add_field(name="File Link", value=f"[Click here to download]({url_string})")
+            embed.add_field(
+                name="File Link", value=f"[Click here to download]({url_string})"
+            )
             await ticket_log_channel.send(embed=embed)
-            await interaction.followup.send("Transcript was saved!",ephemeral=True)
+            await interaction.followup.send("Transcript was saved!", ephemeral=True)
         else:
             await interaction.response.send_message(
                 "Only administrators can use this button.", ephemeral=True
