@@ -187,8 +187,9 @@ async def get_transcript(member, channel: discord.TextChannel):
     date = getcurrenttime.strftime("%A,%B%d,%Y,%I:%M%pUTC")
     date = date.replace(',', '-')
     date = date.replace(':', '-')
-    file_path = os.path.join(save_directory, f"{date}-{member}-{uuid.uuid4()}.html")
-    url_string=f"http://5.161.184.99/html-files/{date}-{member}-{uuid.uuid4()}.html"
+    file_name = f"{date}-{member}-{uuid.uuid4()}.html"
+    file_path = os.path.join(save_directory, file_name)
+    url_string = f"http://5.161.184.99/html-files/{file_name}"
     async with aiofiles.open(file_path, mode="w", encoding="utf-8") as file:
         await file.write(export)
     return url_string
