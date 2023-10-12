@@ -278,7 +278,7 @@ async def open_ticket(opener, guild, reason, provided_id):
         )
         TicketEmbed2.set_footer(text="SkinFlow - Instantly Sell Your CS Skins")
         await ticket_channel.send(
-            content=f"Thank you for opening a ticket {opener.mention}\(||<@&1152597297599893525>||)",
+            content=f"Thank you for opening a ticket {opener.mention}\n(||<@&1152597297599893525>||)",
             embed=TicketEmbed2,
             view=CloseButton(opener),
         )
