@@ -186,6 +186,7 @@ async def get_transcript(member, channel: discord.TextChannel):
     getcurrenttime = discord.utils.utcnow()
     date = getcurrenttime.strftime("%A,%B%d,%Y,%I:%M%pUTC")
     date = date.replace(',', '-')
+    date = date.replace(':', '-')
     file_name = os.path.join(f"{date}-{member}-{uuid.uuid4()}.html")
     async with aiofiles.open(file_name, mode="w", encoding="utf-8") as file:
         await file.write(export)
