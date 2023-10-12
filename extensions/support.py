@@ -185,7 +185,7 @@ async def get_transcript(member, channel: discord.TextChannel):
     export = await chat_exporter.export(channel=channel)
     getcurrenttime = discord.utils.utcnow()
     date = getcurrenttime.strftime("%A,%B%d,%Y,%I:%M%pUTC")
-    file_name = os.path.join(save_directory, f"{date}-{member}-{uuid.uuid4()}.html")
+    file_name = os.path.join(f"{date}-{member}-{uuid.uuid4()}.html")
     async with aiofiles.open(file_name, mode="w", encoding="utf-8") as file:
         await file.write(export)
     return file_name
@@ -350,12 +350,11 @@ class DeleteTranscriptButtons(discord.ui.View):
                 description="Click the link below to download the HTML file.",
                 color=discord.Color.green(),
             )
-            embed.add_field(name="File Link", value=f"[Click here to download](http://5.161.184.99/{file_name})")
-            embed.add_field(name="File Name", value="output.html")
+            embed.add_field(name="File Link", value=f"[Click here to download](http://5.161.184.99/html-files/{file_name})")
             embed.add_field(
                 name="File Size", value=f"{os.path.getsize(file_name) / 1024:.2f} KB"
             )
-            await ticket_log_channel.send(embed=embed, file=discord.File(file_name))
+            await ticket_log_channel.send(embed=embed)
         else:
             await interaction.response.send_message(
                 "Only administrators can use this button.", ephemeral=True
