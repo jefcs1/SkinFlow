@@ -44,7 +44,7 @@ class TransactionID(discord.ui.Modal, title="TransactionID"):
             )
             await interaction.edit_original_response(content="Ticket created!")
         else:
-            await interaction.edit_original_response(content="An invalid transaction ID was provided!")
+            await interaction.response.send_message(content="An invalid transaction ID was provided!\nPlease provide a valid ID and try again.", ephemeral=True)
             return
 
 
