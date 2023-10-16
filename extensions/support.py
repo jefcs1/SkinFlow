@@ -116,7 +116,7 @@ class ReasonsDropDown(discord.ui.Select):
                 description="If you are withdrawing **crypto**, the payment usually takes less than an hour.\nIf you are withdrawing through **PayPal**, it usually takes 8-15 hours.",
                 color=0x444A8D,
             )
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         if selected_reason == "I have not recieved my payment":
             result = await check_tickets(
                 interaction.guild, interaction.user, selected_reason
