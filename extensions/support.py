@@ -2,7 +2,7 @@ import asyncio
 import logging
 import os
 import uuid
-
+import re
 import aiofiles
 import chat_exporter
 import discord
@@ -24,10 +24,9 @@ ticket_reasons = [
 class TransactionID(discord.ui.Modal, title="TransactionID"):
     transaction_id = discord.ui.TextInput(
         label="Provide your Transaction ID.",
-        style=discord.TextStyle.long,
+        style=discord.TextStyle.short,
         placeholder="Please paste your transaction ID in this box...\nDon't know how to get it? Check out #FAQ!",
         required=True,
-        max_length=100,
     )
 
     def __init__(self, reason, *args, **kwargs):
@@ -35,13 +34,18 @@ class TransactionID(discord.ui.Modal, title="TransactionID"):
         self.reason = reason
 
     async def on_submit(self, interaction: discord.Interaction):
-        await interaction.response.send_message(
+        pattern = r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+        if re.match(pattern, self.transaction_id.value):
+            await interaction.response.send_message(
             f"Thank you, creating your ticket now...", ephemeral=True
-        )
-        await open_ticket(
-            interaction.user, interaction.guild, self.reason, self.transaction_id.value
-        )
-        await interaction.edit_original_response(content="Ticket created!")
+            )
+            await open_ticket(
+                interaction.user, interaction.guild, self.reason, self.transaction_id.value
+            )
+            await interaction.edit_original_response(content="Ticket created!")
+        else:
+            await interaction.edit_original_response(content="An invalid transaction ID was provided!")
+            return
 
 
 class SteamID(discord.ui.Modal, title="SteamID"):
@@ -50,7 +54,7 @@ class SteamID(discord.ui.Modal, title="SteamID"):
         style=discord.TextStyle.long,
         placeholder="Please give us your steam id...",
         required=True,
-        max_length=50,
+        max_length=30,
     )
 
     async def on_submit(self, interaction: discord.Interaction):

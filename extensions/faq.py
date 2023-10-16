@@ -22,6 +22,10 @@ skinflow_faq = {
         "title": "If this is the case, you're most likely looking in the wrong place.",
         "description": "First go to this link: https://skinflow.gg/trade \n\nNow look in the top right part of your screen next to your profile icon, and the balance should be there.\n\n[Example Picture](https://fretgfr.com/u/sKiogD.png)",
     },
+    "How can I find my Transaction ID?": {
+        "title": "You can find the ID in your profile page.",
+        "description": "First go to this link: https://skinflow.gg/profile\n\nNow you should see a section with your recent transactions, and the corresponding ID.\nNote: This can only be done on desktop.",
+    },
 }
 
 
