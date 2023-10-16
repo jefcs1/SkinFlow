@@ -24,9 +24,10 @@ ticket_reasons = [
 class TransactionID(discord.ui.Modal, title="TransactionID"):
     transaction_id = discord.ui.TextInput(
         label="Provide your Transaction ID.",
-        style=discord.TextStyle.short,
+        style=discord.TextStyle.long,
         placeholder="Please paste your transaction ID in this box...\nDon't know how to get it? Check out #FAQ!",
         required=True,
+        max_length=50,
     )
 
     def __init__(self, reason, *args, **kwargs):
