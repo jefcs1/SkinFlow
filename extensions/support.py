@@ -16,7 +16,6 @@ ticket_reasons = [
     "I have not recieved my payment",
     "I won a giveaway",
     "I sent my items but my status says declined",
-    "I want to purchase an item from Skinflow",
     "I have a different question/concern",
 ]
 
@@ -178,28 +177,6 @@ class ReasonsDropDown(discord.ui.Select):
                 content="Ticket Created!", ephemeral=True
             )
 
-        if selected_reason == "I want to purchase an item from Skinflow":
-            result = await check_tickets(
-                interaction.guild,
-                interaction.user,
-                selected_reason,
-            )
-            if result == True:
-                await interaction.response.send_message(
-                    "You already have a ticket open for this topic!", ephemeral=True
-                )
-                return
-            else:
-                await interaction.response.send_message(
-                    "Thank you, creating your ticket now...", ephemeral=True
-                )
-            await open_ticket(
-                interaction.user, interaction.guild, selected_reason, None
-            )
-            await interaction.edit_original_response(
-                content="Ticket Created!", ephemeral=True
-            )
-
 
 async def check_tickets(guild, user, reason):
     result = False
@@ -226,7 +203,6 @@ async def get_transcript(member, channel: discord.TextChannel):
 
 async def open_ticket(opener, guild, reason, provided_id):
     payment_category_id = 1161783033272225852
-    buying_category_id = 1161783176142786630
     other_category_id = 1161783108677406790
     if reason == "I have not recieved my payment":
         ticket_category = discord.utils.get(guild.categories, id=payment_category_id)
@@ -234,8 +210,6 @@ async def open_ticket(opener, guild, reason, provided_id):
         ticket_category = discord.utils.get(guild.categories, id=payment_category_id)
     if reason == "I won a giveaway":
         ticket_category = discord.utils.get(guild.categories, id=other_category_id)
-    if reason == "I want to purchase an item from Skinflow":
-        ticket_category = discord.utils.get(guild.categories, id=buying_category_id)
     if reason == "I have a different question/concern":
         ticket_category = discord.utils.get(guild.categories, id=other_category_id)
 
