@@ -13,6 +13,10 @@ class Fun(commands.Cog):
     @app_commands.command(name="bing", description="For MaDiT")
     async def slash_bing(self, interaction: discord.Interaction):
         await interaction.response.send_message("Chilling! :icecream:")
+    
+    @commands.command(aliases=["site"])
+    async def website(self, ctx):
+        await ctx.send("<https://skinflow.gg?referral=DISCORD>")
 
 
 async def setup(bot: commands.Bot) -> None:
