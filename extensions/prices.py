@@ -78,7 +78,6 @@ def match_item(user_input, data):
         if similarity > highest_similarity:
             highest_similarity = similarity
             matched_item = item_name
-    print(highest_similarity)
     if highest_similarity < 55:
         return None
     else:
@@ -148,7 +147,6 @@ class Prices(commands.Cog):
                 api_data = await resp.json()
 
         item = convert_user_input(user_input, api_data)
-        print(item)
         if item:
             price = int(api_data[item[0]]["price"]) / 100
             if price == 0:
@@ -165,6 +163,7 @@ class Prices(commands.Cog):
                     description=f"SkinFlow will buy a {item[0]} for ${price}!",
                     color=0x4448AD,
                 )
+                embed.add_field(name=f"Get a Bonus:", value=f"By using code DISCORD you can get a 2% bonus for a total of ${round((price*1.02), 2)}!", inline=False)
                 if check_fire_deals(item, api_data) != False:
                     fire_deal = check_fire_deals(item, api_data)
                     if fire_deal[1] is not None:
