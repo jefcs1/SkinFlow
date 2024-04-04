@@ -130,7 +130,8 @@ def get_image(item):
         for name, url in data.items():
             if name == item[0]:
                 image_url = url
-        return image_url
+                return image_url
+            return None
 
 class Prices(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
