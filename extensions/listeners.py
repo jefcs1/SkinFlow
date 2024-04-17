@@ -14,7 +14,7 @@ assignable_role_ids = [
 ]
 
 
-class Join(commands.Cog):
+class Listeners(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.logger = logging.getLogger(f"SkinFlow.{self.__class__.__name__}")
         self.bot = bot
@@ -52,4 +52,4 @@ class Join(commands.Cog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Join(bot))
+    await bot.add_cog(Listeners(bot))
