@@ -203,7 +203,7 @@ async def get_transcript(member, channel: discord.TextChannel):
 
 async def open_ticket(opener, guild, reason, provided_id):
     payment_category_id = 1161783033272225852
-    other_category_id = 1161783108677406790
+    other_category_id = 1246866152194314321
     if reason == "I have not recieved my payment":
         ticket_category = discord.utils.get(guild.categories, id=payment_category_id)
     if reason == "I sent my items but my status says declined":
