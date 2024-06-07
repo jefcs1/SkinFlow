@@ -138,6 +138,20 @@ def get_image(item):
     return None
 
 
+def calculate_bonus(price, percentage):
+    return round(price * percentage, 2)
+
+
+def create_embed(title, description=None, color=0x4448AD, fields=None):
+    embed = discord.Embed(title=title, color=color)
+    if description:
+        embed.description = description
+    if fields:
+        for name, value, inline in fields:
+            embed.add_field(name=name, value=value, inline=inline)
+    return embed
+
+
 class Prices(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.logger = logging.getLogger(f"SkinFlow.{self.__class__.__name__}")
@@ -151,62 +165,79 @@ class Prices(commands.Cog):
                 api_data = await resp.json()
 
         item = convert_user_input(user_input, api_data)
+
         if item:
-            price = int(api_data[item[0]]["price"]) / 100
+            item_name = item[0]
+            item_data = api_data[item_name]
+            price = int(item_data["price"]) / 100
             fire_deal = check_fire_deals(item, api_data)
-            two_percent_bonus = round(price * 0.02, 2)
-            fire_deal_bonus = round(price * 0.04, 2)
-            crypto_bonus = (
-                round((price + fire_deal_bonus) * 0.06, 2)
-                if fire_deal
-                else round((price + two_percent_bonus) * 0.06, 2)
+
+            two_percent_bonus = calculate_bonus(price, 0.02)
+            fire_deal_bonus = calculate_bonus(price, 0.02) if fire_deal else 0
+            crypto_bonus = calculate_bonus(
+                (price + two_percent_bonus + fire_deal_bonus),
+                0.06,
             )
-            total_crypto_price = price + crypto_bonus
+            total_crypto_price = (
+                (price + two_percent_bonus + fire_deal_bonus + crypto_bonus)
+            )
+
             if price == 0:
-                embed = discord.Embed(
+                embed = create_embed(
                     title="Item Not Accepted",
-                    description=f"We do not currently accept the {item[0]}.\nThis is most likely because it's price is too volatile.",
+                    description=f"We do not currently accept the {item_name}.\nThis is most likely because its price is too volatile.",
                     color=0xFF0000,
-                )
-                embed.set_footer(
-                    text="If the item isn't accurate, provide a more descriptive item name."
+                    fields=[
+                        (
+                            "If the item isn't accurate, provide a more descriptive item name.",
+                            "",
+                            False,
+                        )
+                    ],
                 )
                 await m.edit(content=None, embed=embed)
             else:
-                embed = discord.Embed(title=f"{item[0]}:", color=0x4448AD)
+                fields = [
+                    ("Base Price:", f"${price}", False),
+                    (
+                        'With the referral code "DISCORD":',
+                        f"+ ${two_percent_bonus}",
+                        False,
+                    ),
+                    ("With crypto bonus:", f"+ ${crypto_bonus}", False),
+                ]
+
+                if fire_deal:
+                    fields.append(
+                        (
+                            f"With a fire deal (only until {fire_deal[1]}):",
+                            f":fire: + ${fire_deal_bonus} :fire:",
+                            False,
+                        )
+                    )
+                
+                fields.append(
+                    (
+                        "Total with crypto withdrawal:",
+                        f"${round(total_crypto_price, 2)}",
+                        False,
+                    ),
+                )
+
+                if item[1] == False and check_if_wear(item):
+                    fields.append(
+                        (
+                            "Please provide a wear value for more accurate pricing.",
+                            "",
+                            False,
+                        )
+                    )
+
+                embed = create_embed(title=f"{item_name}:", fields=fields)
                 embed.set_author(
                     name="Skinflow - Instantly sell your skins.",
                     icon_url="https://fretgfr.com/u/XqAtnV.png",
                 )
-                embed.add_field(name="Base Price:", value=f"${price}", inline=False)
-                embed.add_field(
-                    name='With the referral code "DISCORD":',
-                    value=f"+ ${two_percent_bonus}",
-                    inline=False,
-                )
-                if fire_deal != False:
-                    if fire_deal[1] is not None:
-                        embed.add_field(
-                            name=f"With a fire deal (only until {fire_deal[1]}):",
-                            value=f":fire: + ${fire_deal_bonus} :fire:",
-                            inline=False,
-                        )
-                embed.add_field(
-                    name="With crypto bonus:",
-                    value=(f"+ ${crypto_bonus}"),
-                    inline=False,
-                )
-                embed.add_field(
-                    name="Total with crypto withdrawal:",
-                    value=f"${round(total_crypto_price, 2)}",
-                    inline=False,
-                )
-                if item[1] == False and check_if_wear(item) == True:
-                    embed.add_field(
-                        name="Please provide a wear value for more accurate pricing.",
-                        value="",
-                        inline=False,
-                    )
                 if get_image(item) is not None:
                     embed.set_thumbnail(url=get_image(item))
                 embed.set_footer(
