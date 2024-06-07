@@ -26,7 +26,7 @@ shorthands = {
     "Bayo": "Bayonet",
     "M9": "M9 Bayonet",
     "Deagle": "Desert Eagle",
-    "Ak": "AK-47"
+    "Ak": "AK-47",
 }
 split_conditions = {
     "(Factory": "New)",
@@ -34,15 +34,15 @@ split_conditions = {
     "Bs": "(Battle-Scarred)",
     "Ww": "(Well-Worn)",
     "Ft": "(Field-Tested)",
-
 }
+
 
 def get_input_tokens(user_input):
     input_title = user_input.title()
 
     for condition, full_name in conditions.items():
         input_title = input_title.replace(condition, full_name)
-    
+
     words = input_title.split()
     if "Vanilla" in words:
         words.remove("Vanilla")
@@ -106,32 +106,37 @@ def check_fire_deals(item, api_data):
     else:
         return False
 
+
 def calculate_timeframe(expire_time_str):
     expire_time = datetime.datetime.strptime(expire_time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
     current_time = datetime.datetime.utcnow()
     time_difference = expire_time - current_time
     if time_difference.total_seconds() < 0:
         return None
-    timeframe_r = discord.utils.format_dt(discord.utils.utcnow()+time_difference, style="F")
+    timeframe_r = discord.utils.format_dt(
+        discord.utils.utcnow() + time_difference, style="f"
+    )
     return timeframe_r
+
 
 def check_if_wear(item):
     split_item_name = item[0].split()
-    found=False
+    found = False
     for full_name in conditions.values():
         if full_name in split_item_name:
             found = True
             break
     return found
 
+
 def get_image(item):
-    with open('json/item_images.json', 'r') as file:
+    with open("json/item_images.json", "r") as file:
         data = json.load(file)
         for name, url in data.items():
             if name == item[0]:
-                image_url = url
-                return image_url
-            return None
+                return url
+    return None
+
 
 class Prices(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -142,37 +147,60 @@ class Prices(commands.Cog):
     async def price(self, ctx, *, user_input):
         m = await ctx.send("Finding price...")
         async with aiohttp.ClientSession() as session:
-            async with session.get(
-                f"{skinflow_api}"
-            ) as resp:
+            async with session.get(f"{skinflow_api}") as resp:
                 api_data = await resp.json()
 
         item = convert_user_input(user_input, api_data)
         if item:
             price = int(api_data[item[0]]["price"]) / 100
+            fire_deal = check_fire_deals(item, api_data)
+            two_percent_bonus = round(price * 0.02, 2)
+            fire_deal_bonus = round(price * 0.04, 2)
+            crypto_bonus = (
+                round((price + fire_deal_bonus) * 0.06, 2)
+                if fire_deal
+                else round((price + two_percent_bonus) * 0.06, 2)
+            )
+            total_crypto_price = price + crypto_bonus
             if price == 0:
                 embed = discord.Embed(
                     title="Item Not Accepted",
                     description=f"We do not currently accept the {item[0]}.\nThis is most likely because it's price is too volatile.",
                     color=0xFF0000,
                 )
-                embed.set_footer(text="If the item isn't accurate, provide a more descriptive item name.")
+                embed.set_footer(
+                    text="If the item isn't accurate, provide a more descriptive item name."
+                )
                 await m.edit(content=None, embed=embed)
             else:
-                embed = discord.Embed(
-                    title=f"Sell instantly for ${price}!",
-                    description=f"SkinFlow will buy a {item[0]} for ${price}!",
-                    color=0x4448AD,
+                embed = discord.Embed(title=f"{item[0]}:", color=0x4448AD)
+                embed.set_author(
+                    name="Skinflow - Instantly sell your skins.",
+                    icon_url="https://fretgfr.com/u/XqAtnV.png",
                 )
-                embed.add_field(name=f"Get a Bonus:", value=f"By using code DISCORD you can get a 2% bonus for a total of ${round((price*1.02), 2)}!", inline=False)
-                if check_fire_deals(item, api_data) != False:
-                    fire_deal = check_fire_deals(item, api_data)
+                embed.add_field(name="Base Price:", value=f"${price}", inline=False)
+                embed.add_field(
+                    name='With the referral code "DISCORD":',
+                    value=f"+ ${two_percent_bonus}",
+                    inline=False,
+                )
+                if fire_deal != False:
                     if fire_deal[1] is not None:
                         embed.add_field(
-                            name=f":fire: FIRE DEAL! :fire: Get an extra ${fire_deal[0]} if you sell before:",
-                            value=f"{fire_deal[1]}",
+                            name=f"With a fire deal (only until {fire_deal[1]}):",
+                            value=f":fire: + ${fire_deal_bonus} :fire:",
                             inline=False,
                         )
+                embed.add_field(
+                    name="With crypto bonus:",
+                    value=(f"+ ${crypto_bonus}"),
+                    inline=False,
+                )
+                embed.add_field(
+                    name="Total with crypto withdrawal:",
+                    value=f"${total_crypto_price}",
+                    inline=False,
+                )
                 if item[1] == False and check_if_wear(item) == True:
                     embed.add_field(
                         name="Please provide a wear value for more accurate pricing.",
@@ -181,7 +209,9 @@ class Prices(commands.Cog):
                     )
                 if get_image(item) is not None:
                     embed.set_thumbnail(url=get_image(item))
-                embed.set_footer(text="If the item isn't accurate, provide a more descriptive item name.")
+                embed.set_footer(
+                    text="If the item isn't accurate, provide a more descriptive item name."
+                )
                 await m.edit(content=None, embed=embed)
         else:
             embed = discord.Embed(
@@ -189,7 +219,9 @@ class Prices(commands.Cog):
                 description="Check your spelling and try again.",
                 color=0xFF0000,
             )
-            embed.set_footer(text="If the item isn't accurate, provide a more descriptive item name.")
+            embed.set_footer(
+                text="If the item isn't accurate, provide a more descriptive item name."
+            )
             await m.edit(content=None, embed=embed)
 
 
