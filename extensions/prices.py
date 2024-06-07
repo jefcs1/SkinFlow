@@ -198,7 +198,7 @@ class Prices(commands.Cog):
                 )
                 embed.add_field(
                     name="Total with crypto withdrawal:",
-                    value=f"${total_crypto_price}",
+                    value=f"${round(total_crypto_price, 2)}",
                     inline=False,
                 )
                 if item[1] == False and check_if_wear(item) == True:
