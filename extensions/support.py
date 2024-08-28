@@ -385,7 +385,7 @@ class Support(commands.Cog):
     async def slash_support(self, interaction: discord.Interaction):
         SupportEmbed = discord.Embed(
             title="SkinFlow Support",
-            description="To recieve support, press press the button below.",
+            description="To recieve support, please press the button below.",
             color=0x444A8D,
         )
         SupportEmbed.set_footer(text="SkinFlow - Instantly Sell Your CSGO Skins")
