@@ -174,12 +174,8 @@ class Prices(commands.Cog):
 
             two_percent_bonus = calculate_bonus(price, 0.02)
             fire_deal_bonus = calculate_bonus(price, 0.02) if fire_deal else 0
-            crypto_bonus = calculate_bonus(
-                (price + two_percent_bonus + fire_deal_bonus),
-                0.06,
-            )
-            total_crypto_price = (
-                (price + two_percent_bonus + fire_deal_bonus + crypto_bonus)
+            total_bonus_price = (
+                (price + two_percent_bonus + fire_deal_bonus)
             )
 
             if price == 0:
@@ -204,7 +200,6 @@ class Prices(commands.Cog):
                         f"+ ${two_percent_bonus}",
                         False,
                     ),
-                    ("With crypto bonus:", f"+ ${crypto_bonus}", False),
                 ]
 
                 if fire_deal:
@@ -218,8 +213,8 @@ class Prices(commands.Cog):
                 
                 fields.append(
                     (
-                        "Total with crypto withdrawal:",
-                        f"${round(total_crypto_price, 2)}",
+                        "Total with code DISCORD:",
+                        f"${round(total_bonus_price, 2)}",
                         False,
                     ),
                 )
