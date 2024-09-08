@@ -34,7 +34,7 @@ class Join(commands.Cog):
             await mod_logs_channel.send(embed=embed)
             return
 
-        channel = await self.bot.fetch_channel(1061365944905105554)
+        channel = await self.bot.fetch_channel(1282146550377746522)
         welcome_messages = [
             f"Everyone welcome {member.mention} to the SkinFlow discord!",
             f"Welcome {member.mention}, it's good to have you!",
