@@ -37,16 +37,8 @@ class TicketButton(discord.ui.View):
                     )
                     return
 
-        mode_role_id = 1061365943806214241
-        mod_role = interaction.guild.get_role(mode_role_id)
         permission_overwrites = {
             guild.default_role: discord.PermissionOverwrite(read_messages=False),
-            mod_role: discord.PermissionOverwrite(
-                read_messages=True,
-                send_messages=True,
-                manage_messages=True,
-                embed_links=True,
-            ),
             interaction.user: discord.PermissionOverwrite(
                 read_messages=True, send_messages=True, embed_links=True
             ),
@@ -99,15 +91,10 @@ class CloseButton(discord.ui.View):
         await asyncio.sleep(3)
 
         guild = interaction.guild
-        mod_role_id = 1061365943806214241
-        mod_role = interaction.guild.get_role(mod_role_id)
 
         permission_overwrites = {
             guild.default_role: discord.PermissionOverwrite(
                 read_messages=False, send_messages=False
-            ),
-            mod_role: discord.PermissionOverwrite(
-                read_messages=True, send_messages=True, manage_messages=True
             ),
             self.opener: discord.PermissionOverwrite(
                 read_messages=True, send_messages=False

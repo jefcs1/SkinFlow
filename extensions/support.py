@@ -213,16 +213,8 @@ async def open_ticket(opener, guild, reason, provided_id):
     if reason == "I have a different question/concern":
         ticket_category = discord.utils.get(guild.categories, id=other_category_id)
 
-    mode_role_id = 1061365943806214241
-    mod_role = guild.get_role(mode_role_id)
     permission_overwrites = {
         guild.default_role: discord.PermissionOverwrite(read_messages=False),
-        mod_role: discord.PermissionOverwrite(
-            read_messages=True,
-            send_messages=True,
-            manage_messages=True,
-            embed_links=True,
-        ),
         opener: discord.PermissionOverwrite(
             read_messages=True, send_messages=True, embed_links=True
         ),
@@ -285,15 +277,11 @@ class CloseButton(discord.ui.View):
         await asyncio.sleep(3)
 
         guild = interaction.guild
-        mod_role_id = 1061365943806214241
-        mod_role = interaction.guild.get_role(mod_role_id)
+
 
         permission_overwrites = {
             guild.default_role: discord.PermissionOverwrite(
                 read_messages=False, send_messages=False
-            ),
-            mod_role: discord.PermissionOverwrite(
-                read_messages=True, send_messages=True, manage_messages=True
             ),
             self.opener: discord.PermissionOverwrite(
                 read_messages=True, send_messages=False
